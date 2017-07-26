@@ -1,0 +1,47 @@
+---
+# variables for vagrant_machine
+
+site_admin_email: admin@myvagrant.nl
+
+domain: myvagrant.nl
+letsencrypt_certificates: false
+letsencrypt_email: "{{ site_admin_email }}"
+
+#####################################################################
+# reverse-proxy default variable overrides
+#####################################################################
+
+#####################################################################
+# static-site default variable overrides
+#####################################################################
+
+# Sub-domain variables
+static_site_subdomain: www
+static_site_letsencrypt_test_certificates: true
+
+#####################################################################
+# cloud default variable overrides
+#####################################################################
+
+# Sub-domain variables
+cloud_subdomain: cloud
+cloud_letsencrypt_test_certificates: true
+
+#
+# MariaDB variables
+#
+
+# Database variables
+mysql_root_user: admin
+mysql_root_password: Super_secret_8756
+mysql_nextcloud_db_name: nextcloud
+mysql_nextcloud_db_user: nextcloud_process_name
+mysql_nextcloud_db_password: Another_secret_4512
+
+#
+# Nextcloud variables
+#
+
+# Webserver variables
+nextcloud_admin_user: cloudadmin
+nextcloud_admin_password: cloudadmin

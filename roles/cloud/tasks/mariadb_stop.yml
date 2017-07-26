@@ -1,0 +1,13 @@
+---
+# tasks file for cloud
+
+# Stop MariaDB service
+- name: Stop MariaDB service
+  systemd:
+    unit: cloud_mariadb
+    state: stopped
+    enabled: false
+  # Ignore errors, in case the container does not exist
+  # this is for when we restore data prior to bringing up
+  # services
+  ignore_errors: true

@@ -1,0 +1,19 @@
+[Unit]
+Description=Nextcloud container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name cloud_nextcloud debian
+#ExecStop=/usr/bin/docker stop -t 2 cloud_nextcloud ; /usr/bin/docker rm -f \
+cloud_nextcloud
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a cloud_nextcloud
+ExecStop=/usr/bin/docker stop -t 2 cloud_nextcloud
+
+[Install]
+WantedBy=multi-user.target

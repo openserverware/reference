@@ -1,0 +1,11 @@
+---
+# defaults file for static-site
+
+# Domain variables
+domain: myvagrant.nl
+static_site_subdomain: www
+static_site_letsencrypt_test_certificates: true
+
+#
+# Apache variables
+#

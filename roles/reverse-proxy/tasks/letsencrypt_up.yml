@@ -1,0 +1,56 @@
+---
+# tasks file for reverse-proxy
+#
+# For details on the what, first check the file header references in the
+# nginx.yml file in this project.
+#
+# The see:
+#
+# https://github.com/jwilder/docker-gen
+# https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion#lets-encrypt
+
+#
+# Run '{{ reverseproxy_letsencrypt_image }}' image
+#
+- name: Run '{{ reverseproxy_letsencrypt_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+    definition:
+      version: '2'
+      services:
+
+        #
+        # The letsencrypt setup container
+        #
+        letsencrypt:
+          image: "{{ reverseproxy_letsencrypt_image }}"
+          container_name: reverse-proxy_letsencrypt
+
+          volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock:ro"
+            - "/{{ proxy_letsencrypt_data_path }}/nginx/certs:/etc/nginx/certs:rw"
+          volumes_from:
+            - "container:reverse-proxy_nginx"
+
+          environment:
+            - "DEBUG=false"
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+  when: letsencrypt_certificates
+
+# Write 'reverse-proxy_letsencrypt.service' unit file
+- name: Write 'reverse-proxy_letsencrypt.service' unit file
+  copy:
+    src: "reverse-proxy_letsencrypt.service"
+    dest: "/etc/systemd/system/reverse-proxy_letsencrypt.service"
+    owner: root
+    mode: 0600
+  when: letsencrypt_certificates

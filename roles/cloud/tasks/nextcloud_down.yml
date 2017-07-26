@@ -1,0 +1,21 @@
+---
+# tasks file for cloud
+
+#
+# Remove '{{ cloud_nextcloud_image }}' container
+#
+- name: Remove '{{ cloud_nextcloud_image }}' container
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        nextcloud:
+          image: "{{ cloud_nextcloud_image }}"
+
+    state:
+      absent
+

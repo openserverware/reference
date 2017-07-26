@@ -1,0 +1,14 @@
+---
+# handlers file for common
+
+- name: Restart OpenSSH deamon
+  service:
+    name: sshd
+    state: restarted
+    enabled: yes
+
+- name: Restart Docker deamon
+  service:
+    name: docker
+    state: restarted
+    enabled: yes

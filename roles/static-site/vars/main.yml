@@ -1,0 +1,15 @@
+---
+# vars file for static-site
+
+# Docker image names
+static_site_apache_image: "httpd:2.4.25-alpine@sha256:2b943ffb79a69deb138af7358c37ceb21ab9e2919fa76f72158c541f17ad76d2"
+
+# Path for creating backup archives and uploading restore archives
+static_site_backup_path: "backup/roles/{{role_path | basename}}"
+
+#
+# Apache variables
+#
+
+# Static site data
+static_site_data_path: "var/{{role_path | basename}}/apache"

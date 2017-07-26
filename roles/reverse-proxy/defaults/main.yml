@@ -1,0 +1,5 @@
+---
+# defaults file for reverse-proxy
+
+# Certificates
+letsencrypt_certificates: false

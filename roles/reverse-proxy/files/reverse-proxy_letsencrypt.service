@@ -1,0 +1,19 @@
+[Unit]
+Description=Letsencrypt reverse proxy comanpanion container
+Requires=docker.service
+After=nginx-proxy.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name reverse-proxy_letsencrypt debian
+#ExecStop=/usr/bin/docker stop -t 2 reverse-proxy_letsencrypt ; /usr/bin/docker rm -f \
+reverse-proxy_letsencrypt
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a reverse-proxy_letsencrypt
+ExecStop=/usr/bin/docker stop -t 2 reverse-proxy_letsencrypt
+
+[Install]
+WantedBy=multi-user.target

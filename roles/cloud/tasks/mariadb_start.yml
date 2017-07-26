@@ -1,0 +1,9 @@
+---
+# tasks file for cloud
+
+# Start MariaDB service
+- name: Start MariaDB service
+  systemd:
+    unit: cloud_mariadb
+    state: started
+    enabled: true

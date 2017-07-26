@@ -1,0 +1,10 @@
+---
+# tasks file for reverse-proxy
+
+# Start Nginx service
+- name: Start Nginx service
+  systemd:
+    unit: reverse-proxy_nginx
+    state: started
+    enabled: true
+

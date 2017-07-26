@@ -1,0 +1,7 @@
+---
+# file: web_server.yml
+
+- hosts: web_server
+  become: yes
+  roles:
+    - { role: static-site }

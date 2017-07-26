@@ -1,0 +1,96 @@
+---
+# tasks file for static-site
+
+# For details on the what, how and why see:
+#
+# https://hub.docker.com/_/httpd/
+#
+
+#
+# Create shared data folder
+#
+- name: Create shared data folders
+  file:
+    path: "/{{ static_site_data_path }}/{{ item }}"
+    state: directory
+    owner: root
+    group: 2 # 2 is the uid/gid used by the 'front-facing' process in the Alpine container
+    mode: 0750 # logs are written by root
+  with_items:
+    - 'data'
+    - 'conf'
+    - 'logs'
+
+#
+# Write test page
+#
+# Note: Allow for restoring data before bringing up the service.
+#       Therefore don't overwrite an existing index file.
+#
+- name: Write test page
+  template:
+    src: index.html.j2
+    dest: "/{{ static_site_data_path }}/data/index.html"
+    owner: root
+    group: 2 # 2 is the uid/gid used by the 'front-facing' process in the Alpine container
+    mode: 0740
+    force: no
+
+#
+# Write configuration file
+#
+- name: Write configuration file
+  template:
+    src: httpd.conf.j2
+    dest: "/{{ static_site_data_path }}/conf/httpd.conf"
+    owner: root
+    group: 2 # 2 is the uid/gid used by the 'front-facing' process in the Alpine container
+    mode: 0740
+
+#
+# Run '{{ static_site_apache_image }}' image
+#
+- name: Run '{{ static_site_apache_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+      services:
+
+        #
+        # The Apache container
+        #
+        apache:
+          image: "{{ static_site_apache_image }}"
+          container_name: static-site_apache
+
+          volumes:
+            - "/{{ static_site_data_path }}/data:/usr/local/apache2/htdocs"
+            - "/{{ static_site_data_path }}/conf:/usr/local/apache2/conf"
+            - "/{{ static_site_data_path }}/logs:/usr/local/apache2/logs"
+
+          environment:
+            - "VIRTUAL_HOST={{ static_site_subdomain }}.{{ domain }}"
+
+            - "LETSENCRYPT_HOST={{ static_site_subdomain }}.{{ domain }}"
+            - "LETSENCRYPT_EMAIL={{ letsencrypt_email }}"
+            - "LETSENCRYPT_TEST={{ static_site_letsencrypt_test_certificates }}"
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+
+# Write 'static-site_apache.service' unit file
+- name: Write 'static-site_apache.service' unit file
+  copy:
+    src: "static-site_apache.service"
+    dest: "/etc/systemd/system/static-site_apache.service"
+    owner: root
+    mode: 0600

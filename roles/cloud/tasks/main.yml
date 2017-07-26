@@ -1,0 +1,79 @@
+---
+# tasks file for cloud
+#
+
+#
+# Create server (containers)
+#
+
+# Bring up MariaDB
+- include: mariadb_up.yml
+  tags: [up]
+
+# Bring up Redis
+#- include: redis_up.yml
+#  tags: [up]
+
+# Bring up Nextcloud
+- include: nextcloud_up.yml
+  tags: [up]
+
+#
+# Start server (containers)
+#
+
+# Start MariaDB
+- include: mariadb_start.yml
+  tags: [up]
+
+# Start Redis
+#- include: redis_start.yml
+#  tags: [up]
+
+# Start Nextcloud
+- include: nextcloud_start.yml
+  tags: [up]
+
+#
+# Stop server (containers)
+#
+
+# Stop Nextcloud
+- include: nextcloud_stop.yml
+  tags: [stop]
+
+# Stop Redis
+#- include: redis_stop.yml
+#  tags: [stop]
+
+# Stop MariaDB
+- include: mariadb_stop.yml
+  tags: [stop]
+
+#
+# Backup/restore server data
+#
+
+# Backup cloud data
+- include: cloud_backup.yml
+  tags: [backup]
+
+# Restore cloud data
+- include: cloud_restore.yml
+  tags: [restore]
+
+#
+# Destroy server (containers)
+#
+
+# Bring down Mariadb
+- include: mariadb_down.yml
+  tags: [down]
+
+# Bring down Redis
+#- include: redis_down.yml
+#  tags: [down]
+
+# Bring down Nextcloud
+- include: nextcloud_down.yml
+  tags: [down]

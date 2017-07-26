@@ -1,0 +1,22 @@
+---
+# tasks file for common
+
+# Check os facts
+- include: os.yml
+  tags: [up]
+
+# Bring up iptables
+#- include: iptables.yml
+#  tags: [up]
+
+# Bring up OpenSSH
+- include: openssh.yml
+  tags: [up]
+
+# Bring up Docker
+- include: docker.yml
+  tags: [up]
+
+# Check if containers are stopped
+- include: container.yml
+  tags: [backup, restore, down]

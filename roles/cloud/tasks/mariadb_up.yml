@@ -1,0 +1,66 @@
+---
+# tasks file for cloud
+
+#
+# For details on the what, how and why see:
+#
+# https://hub.docker.com/r/library/mariadb/
+#
+
+#
+# Create shared data folder
+#
+- name: Create shared data folders
+  file:
+    path: "/{{ cloud_mariadb_data_path }}"
+    # mla: let Docker Compose use official Mariadb Dockerfile to set
+    # owner and permissions on this folder.
+    state: directory
+
+#
+# Run '{{ cloud_mariadb_image }}' image
+#
+- name: Run '{{ cloud_mariadb_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+      services:
+
+        #
+        # The database container
+        #
+        mariadb:
+          image: "{{ cloud_mariadb_image }}"
+          container_name: cloud_mariadb
+
+          volumes:
+            - "/{{ cloud_mariadb_data_path }}:/var/lib/mysql"
+
+          expose:
+            - "3306"
+
+          environment:
+            - "MYSQL_ROOT_PASSWORD={{ mysql_root_password }}"
+            - "MYSQL_DATABASE={{ mysql_nextcloud_db_name }}"
+            - "MYSQL_USER={{ mysql_nextcloud_db_user }}"
+            - "MYSQL_PASSWORD={{ mysql_nextcloud_db_password }}"
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+
+# Write 'cloud_mariadb.service' unit file
+- name: Write 'cloud_mariadb.service' unit file
+  copy:
+    src: "cloud_mariadb.service"
+    dest: "/etc/systemd/system/cloud_mariadb.service"
+    owner: root
+    mode: 0600

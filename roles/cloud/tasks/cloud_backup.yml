@@ -1,0 +1,35 @@
+---
+# tasks file for cloud
+
+#
+# Create backup folders
+#
+- name: Create backup folders
+  file:
+    path: "~/{{ cloud_backup_path }}/nextcloud"
+    state: directory
+    owner: root
+    mode: 0700
+- name: Create backup folders
+  file:
+    path: "~/{{ cloud_backup_path }}/mariadb"
+    state: directory
+    owner: root
+    mode: 0700
+#
+# Archive data (overwrite previous archive)
+#
+- command: 'tar -czf "~/{{ cloud_backup_path }}/nextcloud/nextcloud_data.tgz" "/{{ cloud_nextcloud_data_path }}"'
+- command: 'tar -czf "~/{{ cloud_backup_path }}/mariadb/mariadb_data.tgz" "/{{ cloud_mariadb_data_path }}"'
+
+#
+# Fetch data to local
+#
+- fetch:
+    src: "~/{{ cloud_backup_path }}/nextcloud/nextcloud_data.tgz"
+    dest: ./backups
+    fail_on_missing: yes
+- fetch:
+    src: "~/{{ cloud_backup_path }}/mariadb/mariadb_data.tgz"
+    dest: ./backups
+    fail_on_missing: yes

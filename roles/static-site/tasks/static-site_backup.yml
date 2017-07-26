@@ -1,0 +1,22 @@
+---
+# tasks file for static-site
+
+#
+# Create backup folders
+#
+- name: Create backup folders
+  file:
+    path: "~/{{ static_site_backup_path }}/apache"
+    state: directory
+    owner: root
+    mode: 0700
+#
+# Archive data (overwrite previous archive)
+#
+- command: 'tar -czf "~/{{ static_site_backup_path }}/apache/apache_data.tgz" "/{{ static_site_data_path }}"'
+
+# Fetch data to local
+- fetch:
+    src: "~/{{ static_site_backup_path }}/apache/apache_data.tgz"
+    dest: ./backups
+    fail_on_missing: yes

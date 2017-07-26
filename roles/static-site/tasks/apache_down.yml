@@ -1,0 +1,21 @@
+---
+# tasks file for static-site
+
+#
+# Remove '{{ static_site_apache_image }}' container
+#
+- name: Remove '{{ static_site_apache_image }}' container
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        apache:
+          image: "{{ static_site_apache_image }}"
+
+    state:
+      absent
+

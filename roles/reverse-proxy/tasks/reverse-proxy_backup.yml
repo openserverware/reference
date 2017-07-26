@@ -1,0 +1,22 @@
+---
+# tasks file for reverse-proxy
+
+#
+# Create backup folders
+#
+- name: Create backup folders
+  file:
+    path: "~/{{ reverseproxy_backup_path }}/certificates"
+    state: directory
+    owner: root
+    mode: 0700
+#
+# Archive data (overwrite previous archive)
+#
+- command: 'tar -czf "~/{{ reverseproxy_backup_path }}/certificates/cert_data.tgz" "/{{ proxy_letsencrypt_data_path }}"'
+
+# Fetch data to local
+- fetch:
+    src: "~/{{ reverseproxy_backup_path }}/certificates/cert_data.tgz"
+    dest: ./backups
+    fail_on_missing: yes

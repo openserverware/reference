@@ -1,0 +1,31 @@
+---
+# tasks file for common
+
+#
+# Check facts to make sure we are working on Debian Jessie or later
+#
+- name: Check facts to make sure we are working on Debian Jessie or later
+  fail:
+    msg: "*** This machine is not running Debian Jessie or later! ***"
+  when: ((ansible_distribution != "Debian") or (ansible_distribution_major_version|version_compare('8', '<')))
+
+- name: Check facts to make sure systemd is used
+  fail:
+    msg: "*** This machine is not running systemd! ***"
+  when: (ansible_service_mgr != 'systemd')
+
+#
+# Install aptitude
+#
+- name: Install aptitude
+  apt:
+    name: aptitude
+  when: ((ansible_distribution == "Debian") and (ansible_distribution_major_version|version_compare('9', '=')))
+
+#
+# Update and upgrade
+#
+- name: Update package list and upgrade packages
+  apt:
+    update_cache: yes
+    upgrade: safe

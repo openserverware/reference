@@ -1,0 +1,10 @@
+---
+# tasks file for reverse-proxy
+
+# Start Let's Encrypt service
+- name: Start Let's Encrypt service
+  systemd:
+    unit: reverse-proxy_letsencrypt
+    state: started
+    enabled: true
+  when: letsencrypt_certificates

@@ -1,0 +1,21 @@
+---
+# vars file for reverse-proxy
+
+# Docker image names
+reverseproxy_letsencrypt_image: "jrcs/letsencrypt-nginx-proxy-companion@sha256:ee7eb4895cd3c0cd1537bab930ec402235512c7a1bb48fc448ef06faa435c5fb"
+reverseproxy_nginx_image: "jwilder/nginx-proxy:0.5.0@sha256:fbaf5389599fdb787ecb34fb59914a6d2338a4a9cf795e3b68933072ef1ddb5e"
+
+# Path for creating backup archives and uploading restore archives
+reverseproxy_backup_path: "backup/roles/{{role_path | basename}}"
+
+#
+# Letsencrypt variables
+#
+
+proxy_letsencrypt_data_path: "var/{{role_path | basename}}/letsencrypt"
+
+#
+# Nginx-proxy variables
+#
+
+proxy_nginx_data_path: "var/{{role_path | basename}}/nginx"

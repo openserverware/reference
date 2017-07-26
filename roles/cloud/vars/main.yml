@@ -1,0 +1,33 @@
+---
+# vars file for cloud
+
+# Docker image names
+cloud_mariadb_image: "mariadb:10.0.29@sha256:46be207f2949854fd7dc1128893ec39cc230243278ebf73b923feaa71f7b3b0f"
+cloud_nextcloud_image: "wonderfall/nextcloud:12.0@sha256:53403666b4620229db477653ecc1ed2316f113aa5c913455bd38f200ffe6d965"
+#cloud_nextcloud_image: "wonderfall/nextcloud:11.0@sha256:8e31c9e438779c34194184a6c6fb95ffda01d22aaafb8d4ba19d14ec2411c5b2"
+#cloud_nextcloud_image: "wonderfall/nextcloud:10.0@sha256:b9a93d90dd44f068f39f1d9870bab499f889b8a1d70658bbfc44fcaaf7956591"
+cloud_redis_image: "redis:alpine"
+
+# Path for creating backup archives and uploading restore archives
+cloud_backup_path: "backup/roles/{{role_path | basename}}"
+
+#
+# MariaDB variables
+#
+
+# Database data
+cloud_mariadb_data_path: "var/{{role_path | basename}}/mariadb-nextcloud"
+
+#
+# Nextcloud variables
+#
+
+# Nextcloud config, apps, data
+cloud_nextcloud_data_path: "var/{{role_path | basename}}/nextcloud"
+
+#
+# Redis variables
+#
+
+# Redis data
+cloud_redis_data_path: "var/{{role_path | basename}}/redis"

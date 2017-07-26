@@ -1,0 +1,21 @@
+---
+# tasks file for cloud
+
+#
+# Remove '{{ cloud_mariadb_image }}' container
+#
+- name: Remove '{{ cloud_mariadb_image }}' container
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        mariadb:
+          image: "{{ cloud_mariadb_image }}"
+
+    state:
+      absent
+

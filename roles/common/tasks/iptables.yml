@@ -1,0 +1,37 @@
+---
+# tasks file for common
+
+#
+# Install iptables package
+#
+- name: Ensure iptables is installed
+  apt:
+    name: iptables
+    state: present
+
+- name: Flush iptables (initially,... if firewall.bash was not found)
+  command: >
+    iptables -F
+    creates=/etc/firewall.bash
+
+- name: Copy firewall script into place
+  template:
+    src: etc/firewall.bash.j2
+    dest: /etc/firewall.bash
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Copy firewall systemd unit file into place
+  copy:
+    src: firewall.service
+    dest: /etc/systemd/system/firewall.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start firewall (and enable to start on boot)
+  systemd:
+    unit: firewall
+    state: restarted
+    enabled: true

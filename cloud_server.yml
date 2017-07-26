@@ -1,0 +1,7 @@
+---
+# file: cloud_server.yml
+
+- hosts: cloud_server
+  become: yes
+  roles:
+    - { role: cloud }

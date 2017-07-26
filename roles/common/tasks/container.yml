@@ -1,0 +1,17 @@
+---
+# tasks file for common
+
+#
+# Test if containers are stopped
+#
+- name: Test if containers are stopped
+  command: docker ps -q
+  register: result
+
+#
+# Fail if (not all) containers are stopped
+#
+- name: Fail if (not all) containers are stopped
+  fail:
+    msg: "Before creating/restoring backups or bringing down servers, all containers must be stopped first!"
+  when: result.stdout != ""

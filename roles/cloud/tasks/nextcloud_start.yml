@@ -1,0 +1,9 @@
+---
+# tasks file for cloud
+
+# Start Nextcloud service
+- name: Start Nextcloud service
+  systemd:
+    unit: cloud_nextcloud
+    state: started
+    enabled: true

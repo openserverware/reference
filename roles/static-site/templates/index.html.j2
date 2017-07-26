@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+<title>{{ domain }} - servers</title>
+</head>
+
+<body>
+<h1>Installed servers</h1>
+
+<h2>General servers</h1>
+
+{% if 'web_server' in group_names %}
+ <li><ul><a href="http://{{ static_site_subdomain }}.{{ domain }}" >static page</a></ul></li>
+{% endif %}
+
+{% if 'cloud_server' in group_names %}
+ <li><ul><a href="http://{{ cloud_subdomain }}.{{ domain }}" >cloud</a></ul></li>
+{% endif %}
+
+<h2>Development servers</h1>
+
+{% if 'development_server' in group_names %}
+ <table style="width:100%">
+  <tr>
+{% for realm in development_realms %}
+    <th>{{ realm.realm_name }}</th>
+{% endfor %}
+  </tr>
+  <tr>
+{% for realm in development_realms %}
+    <td><a href="http://{{ development_subdomain }}.{{ domain }}/{{ realm.realm_name }}/trac" >tickets</a></td>
+{% endfor %}
+  </tr>
+  <tr>
+{% for realm in development_realms %}
+    <td><a href="http://{{ development_subdomain }}.{{ domain }}/{{ realm.realm_name }}/reviews" >reviews</a></td>
+{% endfor %}
+  </tr>
+  <tr>
+{% for realm in development_realms %}
+    <td><a href="http://{{ development_subdomain }}.{{ domain }}/{{ realm.realm_name }}/svn" >sources</a></td>
+{% endfor %}
+  </tr>
+  <tr>
+{% if 'build_server' in group_names %}
+{% for realm in development_realms %}
+    <td><a href="http://{{ build_subdomain }}.{{ domain }}" >builds</a></td>
+{% endfor %}
+{% endif %}
+  </tr>
+</table>
+{% endif %}
+
+<h2>Support servers</h1>
+
+{% if 'log_server' in group_names %}
+ <li><ul><a href="http://{{ logs_subdomain }}.{{ domain }}" >logs</a></ul></li>
+{% endif %}
+
+{% if 'metrics_server' in group_names %}
+ <li><ul><a href="http://{{ metrics_subdomain }}.{{ domain }}" >metrics</a></ul></li>
+{% endif %}
+
+</body>

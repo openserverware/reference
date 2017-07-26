@@ -1,0 +1,9 @@
+---
+# tasks file for static-site
+
+# Start Apache service
+- name: Start Apache service
+  systemd:
+    unit: static-site_apache
+    state: started
+    enabled: true

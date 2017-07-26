@@ -1,0 +1,13 @@
+---
+# tasks file for static-site
+
+# Stop Apache service
+- name: Stop Apache service
+  systemd:
+    unit: static-site_apache
+    state: stopped
+    enabled: false
+  # Ignore errors, in case the container does not exist
+  # this is for when we restore data prior to bringing up
+  # services
+  ignore_errors: true

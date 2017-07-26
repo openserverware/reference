@@ -1,0 +1,19 @@
+[Unit]
+Description=Apache container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name static-site_apache debian
+#ExecStop=/usr/bin/docker stop -t 2 static-site_apache ; /usr/bin/docker rm -f \
+static-site_apache
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a static-site_apache
+ExecStop=/usr/bin/docker stop -t 2 static-site_apache
+
+[Install]
+WantedBy=multi-user.target

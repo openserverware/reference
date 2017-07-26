@@ -1,0 +1,19 @@
+[Unit]
+Description=Reverse proxy container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name reverse-proxy_nginx debian
+#ExecStop=/usr/bin/docker stop -t 2 reverse-proxy_nginx ; /usr/bin/docker rm -f \
+reverse-proxy_nginx
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a reverse-proxy_nginx
+ExecStop=/usr/bin/docker stop -t 2 reverse-proxy_nginx
+
+[Install]
+WantedBy=multi-user.target

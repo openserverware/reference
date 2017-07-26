@@ -1,0 +1,89 @@
+---
+# tasks file for cloud
+
+#
+# Create restore folders
+#
+- name: Create restore folders
+  file:
+    path: "~/{{ cloud_backup_path }}/nextcloud"
+    state: directory
+    owner: root
+    mode: 0700
+
+- name: Create restore folders
+  file:
+    path: "~/{{ cloud_backup_path }}/mariadb"
+    state: directory
+    owner: root
+    mode: 0700
+
+#
+# Restore data
+#
+- name: Copy data to remote
+  copy:
+    src: ./backups/{{ inventory_hostname }}/root/{{ cloud_backup_path }}/mariadb/mariadb_data.tgz
+    dest: "~/{{ cloud_backup_path }}/mariadb"
+    owner: root
+    mode: 0600
+
+- name: Check for uploaded data
+  stat:
+    path: "~/{{ cloud_backup_path }}/mariadb/mariadb_data.tgz"
+  register: a1
+
+- name: Failing if needed
+  fail:
+    msg: "Data not uploaded!"
+  when: a1.stat.exists == false
+
+- name: Check for existing data
+  stat:
+    path: "/{{ cloud_mariadb_data_path }}"
+  register: a2
+
+- name: Move existing data
+  command: "{{ item }}"
+  with_items:
+    - 'rm -rf /{{ cloud_mariadb_data_path }}_prev'
+    - 'mv /{{ cloud_mariadb_data_path }} /{{ cloud_mariadb_data_path }}_prev'
+  when: a2.stat.isdir is defined and a2.stat.isdir
+
+- name: Extracting data
+  shell: 'cd /. && tar -xzf ~/{{ cloud_backup_path }}/mariadb/mariadb_data.tgz'
+
+#
+# Restore data
+#
+- name: Copy data to remote
+  copy:
+    src: ./backups/{{ inventory_hostname }}/root/{{ cloud_backup_path }}/nextcloud/nextcloud_data.tgz
+    dest: "~/{{ cloud_backup_path }}/nextcloud"
+    owner: root
+    mode: 0600
+
+- name: Check for uploaded data
+  stat:
+    path: "~/{{ cloud_backup_path }}/nextcloud/nextcloud_data.tgz"
+  register: d1
+
+- name: Failing if needed
+  fail:
+    msg: "Data not uploaded!"
+  when: d1.stat.exists == false
+
+- name: Check for existing data
+  stat:
+    path: "/{{ cloud_nextcloud_data_path }}"
+  register: d2
+
+- name: Move existing data
+  command: "{{ item }}"
+  with_items:
+    - 'rm -rf /{{ cloud_nextcloud_data_path }}_prev'
+    - 'mv /{{ cloud_nextcloud_data_path }} /{{ cloud_nextcloud_data_path }}_prev'
+  when: d2.stat.isdir is defined and d2.stat.isdir
+
+- name: Extracting data
+  shell: 'cd /. && tar -xzf ~/{{ cloud_backup_path }}/nextcloud/nextcloud_data.tgz'

@@ -1,0 +1,64 @@
+---
+# tasks file for reverse-proxy
+#
+
+#
+# Create server (containers)
+#
+
+# Bring up Nginx
+- include: nginx_up.yml
+  tags: [up]
+
+# Bring up Let's Encrypt
+- include: letsencrypt_up.yml
+  tags: [up]
+
+#
+# Start server (containers)
+#
+
+# Start Nginx
+- include: nginx_start.yml
+  tags: [up]
+
+# Start Let's Encrypt
+- include: letsencrypt_start.yml
+  tags: [up]
+
+#
+# Stop server (containers)
+#
+
+# Stop Nginx
+- include: nginx_stop.yml
+  tags: [stop]
+
+# Stop Let's Encrypt
+- include: letsencrypt_stop.yml
+  tags: [stop]
+
+#
+# Backup/restore server data
+#
+
+# Backup reverse-proxy data
+- include: reverse-proxy_backup.yml
+  tags: [backup]
+
+# Restore reverse-proxy data
+- include: reverse-proxy_restore.yml
+  tags: [restore]
+
+#
+# Destroy server (containers)
+#
+
+# Bring down Nginx
+- include: nginx_down.yml
+  tags: [down]
+
+# Bring down Let's Encrypt
+- include: letsencrypt_down.yml
+  tags: [down]
+

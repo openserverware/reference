@@ -1,0 +1,14 @@
+---
+# tasks file for reverse-proxy
+
+# Stop Lets Encrypt service
+- name: Stop Lets Encrypt service
+  systemd:
+    unit: reverse-proxy_letsencrypt
+    state: stopped
+    enabled: false
+  # Ignore errors, in case the container does not exist
+  # this is for when we restore data prior to bringing up
+  # services
+  ignore_errors: true
+  when: letsencrypt_certificates

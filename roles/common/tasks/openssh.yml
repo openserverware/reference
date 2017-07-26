@@ -1,0 +1,55 @@
+---
+# tasks file for common
+
+#
+# Install OpenSSH package
+#
+- name: Install OpenSSH package
+  apt:
+    name: ssh
+    state: present
+  notify:
+    - Restart OpenSSH deamon
+
+- name: Add public key
+  debug:
+    msg: "*** TODO:FIRST INSERT PUBLIC KEY FROM CONTROL ***"
+  notify:
+    - Restart OpenSSH deamon
+
+#- name: Write OpenSSH config - Open port 21 to work around LAN firewall
+#  lineinfile:
+#    dest: /etc/ssh/sshd_config
+#    insertbefore: '^Port 22'
+#    line: 'Port 21'
+#    state: present
+#  notify:
+#    - Restart OpenSSH deamon
+
+- name: Write OpenSSH config - Disable features
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^ChallengeResponseAuthentication'
+    line: 'ChallengeResponseAuthentication no'
+    state: present
+  notify:
+    - Restart OpenSSH deamon
+
+- lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    state: present
+  notify:
+    - Restart OpenSSH deamon
+
+- lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^UsePAM'
+    line: 'UsePAM no'
+    state: present
+  notify:
+    - Restart OpenSSH deamon
+
+# Restart OpenSSH deamon on notification,...now
+- meta: flush_handlers

@@ -1,0 +1,46 @@
+---
+# tasks file for reverse-proxy
+
+#
+# Create restore folders
+#
+- name: Create restore folders
+  file:
+    path: "~/{{ reverseproxy_backup_path }}/certificates"
+    state: directory
+    owner: root
+    mode: 0700
+#
+# Restore certificates
+#
+- name: Copy data to remote
+  copy:
+    src: ./backups/{{ inventory_hostname }}/root/{{ reverseproxy_backup_path }}/certificates/cert_data.tgz
+    dest: "~/{{ reverseproxy_backup_path }}/certificates"
+    owner: root
+    mode: 0600
+
+- name: Check for uploaded certificates
+  stat:
+    path: "~/{{ reverseproxy_backup_path }}/certificates/cert_data.tgz"
+  register: c1
+
+- name: Failing if needed
+  fail:
+    msg: "Certificats not uploaded!"
+  when: c1.stat.exists == false
+
+- name: Check for existing certificates
+  stat:
+    path: "/{{ proxy_letsencrypt_data_path }}"
+  register: c2
+
+- name: Move existing certificates
+  command: "{{ item }}"
+  with_items:
+    - 'rm -rf /{{ proxy_letsencrypt_data_path }}_prev'
+    - 'mv /{{ proxy_letsencrypt_data_path }} /{{ proxy_letsencrypt_data_path }}_prev'
+  when: c2.stat.isdir is defined and c2.stat.isdir
+
+- name: Extracting certificates
+  shell: 'cd /. && tar -xzf ~/{{ reverseproxy_backup_path }}//certificates/cert_data.tgz'

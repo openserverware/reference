@@ -1,0 +1,46 @@
+---
+# tasks file for static-site
+
+#
+# Create server (containers)
+#
+
+# Bring up Apache
+- include: apache_up.yml
+  tags: [up]
+
+#
+# Start server (containers)
+#
+
+# Start Apache
+- include: apache_start.yml
+  tags: [up]
+
+#
+# Stop server (containers)
+#
+
+# Stop Apache
+- include: apache_stop.yml
+  tags: [stop]
+
+#
+# Backup/restore server data
+#
+
+# Backup static-site data
+- include: static-site_backup.yml
+  tags: [backup]
+
+# Restore static-site data
+- include: static-site_restore.yml
+  tags: [restore]
+
+#
+# Destroy server (containers)
+#
+
+# Bring down Apache
+- include: apache_down.yml
+  tags: [down]

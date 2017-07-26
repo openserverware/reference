@@ -1,0 +1,43 @@
+# This is the Ansible 'hosts' file.
+
+#---------------------------------------------------------------------
+# Machines: all available machines
+#---------------------------------------------------------------------
+vagrant_machine           ansible_host=192.168.33.10          ansible_port=22  ansible_user=vagrant  ansible_ssh_private_key_file=inventory/vagrant_box_unsecure_key
+
+#---------------------------------------------------------------------
+# Group machines by purpose, e.g.:
+# chat server, cloud server etc.
+#---------------------------------------------------------------------
+
+[web_server]
+vagrant_machine
+
+[cloud_server]
+vagrant_machine
+
+#---------------------------------------------------------------------
+# Group machines by development phase, e.g:
+# testing, staging, production, etc.
+#---------------------------------------------------------------------
+
+# Do automated testing
+# -pulling images with name:version tags
+[testing]
+
+# Final tests before release
+# -pulling images with digests only
+[staging]
+vagrant_machine
+
+# Provide customer service
+# -pulling images with digests only
+[production]
+
+#---------------------------------------------------------------------
+# Group machines by network provider, e.g.:
+# trans_ip, amazon, etc.
+#---------------------------------------------------------------------
+
+
+

@@ -1,0 +1,104 @@
+---
+# tasks file for cloud
+
+###
+### Create shared data folder
+###
+##- name: Create shared data folders
+##  file:
+##    path: "/{{ cloud_nextcloud_data_path }}/config"
+##    owner: root
+##    group: www-data
+##    mode: 0770
+##    state: directory
+##
+###
+### For details on the what, how and why see:
+###
+### https://github.com/Wonderfall/dockerfiles
+###
+##
+###
+### Write configuration templates
+###
+##- name: Write configuration templates
+##  template:
+##    src: "{{ item }}.j2"
+##    dest: "/{{ item }}"
+##    owner: root
+##    group: www-data
+##    mode: 0640
+##  with_items:
+##    - '{{ cloud_nextcloud_data_path }}/config/redis.config.php'
+
+#
+# Run '{{ cloud_nextcloud_image }}' image
+#
+- name: Run '{{ cloud_nextcloud_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+      services:
+
+        #
+        # The Nextcloud container
+        #
+        nextcloud:
+          image: "{{ cloud_nextcloud_image }}"
+          container_name: cloud_nextcloud
+
+          volumes:
+            - "/{{ cloud_nextcloud_data_path }}/data:/data"
+            - "/{{ cloud_nextcloud_data_path }}/config:/config"
+            - "/{{ cloud_nextcloud_data_path }}/apps:/apps2"
+            - "/{{ cloud_nextcloud_data_path }}/themes:/nextcloud/themes"
+
+          expose:
+            - "8888"
+
+          environment:
+            - "UID=1000"
+            - "GID=1000"
+#            - "UPLOAD_MAX_SIZE=10G"
+#            - "APC_SHM_SIZE=128M"
+#            - "OPCACHE_MEM_SIZE=128"
+#            - "MEMORY_LIMIT=512M"
+#            - "CRON_PERIOD=15m"
+#            - "CRON_MEMORY_LIMIT=1024m"
+#            - "TZ=Etc/UTC"
+
+            - "ADMIN_USER={{ nextcloud_admin_user }}"
+            - "ADMIN_PASSWORD={{ nextcloud_admin_password }}"
+            - "DOMAIN={{ cloud_subdomain }}.{{ domain }}"
+
+            - "DB_TYPE=mysql"
+            - "DB_NAME={{ mysql_nextcloud_db_name }}"
+            - "DB_USER={{ mysql_nextcloud_db_user }}"
+            - "DB_PASSWORD={{ mysql_nextcloud_db_password }}"
+            - "DB_HOST=mariadb"
+
+            - "VIRTUAL_HOST={{ cloud_subdomain }}.{{ domain }}"
+
+            - "LETSENCRYPT_HOST={{ cloud_subdomain }}.{{ domain }}"
+            - "LETSENCRYPT_EMAIL={{ letsencrypt_email }}"
+            - "LETSENCRYPT_TEST={{ cloud_letsencrypt_test_certificates }}"
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+
+# Write 'cloud_nextcloud.service' unit file
+- name: Write 'cloud_nextcloud.service' unit file
+  copy:
+    src: "cloud_nextcloud.service"
+    dest: "/etc/systemd/system/cloud_nextcloud.service"
+    owner: root
+    mode: 0600

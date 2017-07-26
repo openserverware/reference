@@ -1,0 +1,64 @@
+---
+#
+# About using the playbook:
+#
+#   Each host should (initially) be a machine with a clean install of Debian Jessie or
+#   Debian Stretch. This is what these playbooks are tested on.
+#
+#   Folders, configuration files and data files that are needed to make
+#   a service run normally are created while bringing up services using the playbook.
+#   This makes it possible to start services on a 'clean' machine.
+#
+#   Files that can be changed by a service are considered data files.
+#   Existing data files are ignored and kept unchanged.
+#   This allows for bringing up services with restored data.
+#
+# This playbook can be used to:
+#
+# 1 Bring up services on a host.
+#
+#   As follows:
+#
+#     ansible-playbook --limit=<machine> --tags=up site.yml
+#
+# 2 Create a backup of service data.
+#
+#   As follows:
+#
+#     ansible-playbook --limit=<machine> --tags=stop site.yml
+#     ansible-playbook --limit=<machine> --tags=backup site.yml
+#     ansible-playbook --limit=<machine> --tags=up site.yml
+#
+# 3 Restore service data from a backup.
+#
+#   Existing service data on the host is copied. Older copies are removed.
+#
+#   As follows:
+#
+#     ansible-playbook --limit=<machine> --tags=stop site.yml
+#     ansible-playbook --limit=<machine> --tags=restore site.yml
+#     ansible-playbook --limit=<machine> --tags=up site.yml
+#
+# 4 Remove services from the host
+#
+#     ansible-playbook --limit=<machine> --tags=stop site.yml
+#     ansible-playbook --limit=<machine> --tags=down site.yml
+#     ...
+#     <change host file for groups the host is in>
+#     ...
+#     ansible-playbook --limit=<machine> --tags=up site.yml
+#
+# 5 As in 1, 2, 3 or 4 but for a sub-set of the services that
+#   are configured for a machine in the inventory/hosts file.
+#
+#   This must be done first for accessing the host:
+#
+#     ansible-playbook --limit=<machine> --tags=up common.yml
+#
+#   Then individual servers can be addressed. For example:
+#
+#     ansible-playbook --limit=<machine> --tags=restore,up web_server.yml
+#
+- include: common.yml
+- include: web_server.yml
+- include: cloud_server.yml

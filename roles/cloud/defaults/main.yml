@@ -1,0 +1,26 @@
+---
+# defaults file for cloud
+
+# Domain variables
+domain: myvagrant.nl
+cloud_subdomain: cloud
+cloud_letsencrypt_test_certificates: true
+
+#
+# MariaDB variables
+#
+
+# Database variables
+mysql_root_user: root
+mysql_root_password: test
+mysql_nextcloud_db_name: nextcloud
+mysql_nextcloud_db_user: nextcloud_server
+mysql_nextcloud_db_password: 123_Ul
+
+#
+# Nextcloud variables
+#
+
+# Nextcloud variables
+nextcloud_admin_user: admin
+nextcloud_admin_password: admin
