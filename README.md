@@ -37,9 +37,10 @@ Note:
 
 Please read the site.yml documentation to find out about its backup and restore features.
 
-# What can be improved improved?
+# What can be improved?
 
-The output is not suitable for public cloud infrastructure use.
+The output is not (yet) suitable for public cloud infrastructure use.
+
 Things that come to mind that are to be done:
 
 - Finish the firewall integration
@@ -49,11 +50,13 @@ Things that come to mind that are to be done:
 # What do I hope to achieve with this project?
 
 *Make it easy to implement and maintain open source server applications.*
+
 *In particular for small private, community and business use.*
 
 # Why am I sharing this?
 
 I'm sharing this project hoping to receive your feedback.
+
 I will consider any changes to improve it as a reference implementation and
 help it achieve its purpose (as just mentioned).
 
