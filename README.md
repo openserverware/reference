@@ -32,8 +32,8 @@ Note:
 
    - Don't forget to add the www.myvagrant.nl and cloud.myvagrant.nl domain names to your /etc/hosts file
    - To request let's encrypt certificates, set host variable 'letsencrypt_certificates: true'
-   - To get test certificates set variables '\<role\>\_letsencrypt\_test\_certificates: true'
-   - To get certificates set variables '\<role\>\_letsencrypt\_test\_certificates: false'
+   - To get test certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: true'
+   - To get certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: false'
 
 Please read the site.yml documentation to find out about its backup and restore features.
 
