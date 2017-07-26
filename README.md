@@ -2,20 +2,21 @@
 
 This project contains an Ansible playbook.
 
-Firstly it is designed to configure a host machine.
+When run, it first configures a host machine.
 It does some simple configuration for OpenSSH and it installs Docker.
 
-More work has gone into the Ansible roles.
-It uses Ansible roles to load Docker images on hosts.
-To run them as containers, it uses the Docker compose approach, with YAML,just like how Ansible itself defines structure.
-One Ansible role is used for each application. Each application can consist of one or more containers.
+Then Ansible roles are used to deploy/configure applications.
+One Ansible role is used for each application.
+
+Ansible roles are used to load Docker images onto hosts, build a custom image (when needed) and run images as containers.
+To run images, it uses the Docker compose approach, using YAML, just like how Ansible itself defines structure.
 
 Note:
 
-      Unfortunately this demo does not show how loaded Docker images can be used as reference to build a new image.
+      Unfortunately this reference does not show how loaded Docker images can be used as reference to build a new image.
       Maybe I'll add a role that does that later. It will make this reference project more complete.
 
-Currently the following applications are included in this demo:
+Currently the following applications are included in this reference:
 
 - A reverse proxy and let's encrypt certificate manager
 - Apache
