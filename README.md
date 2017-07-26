@@ -31,9 +31,9 @@ Running it should be as simple as entering:
 Note:
 
    - Don't forget to add the www.myvagrant.nl and cloud.myvagrant.nl domain names to your /etc/hosts file
-   - To request let's encrypt certificates, set 'letsencrypt_certificates: true'
-   - To get test certificates set '\<role\>\_letsencrypt\_test\_certificates: false'
-   - To get certificates set '\<role\>\_letsencrypt\_test\_certificates: true'
+   - To request let's encrypt certificates, set host variable 'letsencrypt_certificates: true'
+   - To get test certificates set variables '\<role\>\_letsencrypt\_test\_certificates: true'
+   - To get certificates set variables '\<role\>\_letsencrypt\_test\_certificates: false'
 
 Please read the site.yml documentation to find out about its backup and restore features.
 
@@ -59,5 +59,3 @@ I'm sharing this project hoping to receive your feedback.
 
 I will consider any changes to improve it as a reference implementation and
 help it achieve its purpose (as just mentioned).
-
-...and to find a job;-)
