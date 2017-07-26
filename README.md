@@ -43,7 +43,7 @@ The output is not (yet) suitable for public cloud infrastructure use.
 
 Things that come to mind that are to be done:
 
-- Finish the firewall integration
+- Finish the firewall configuration
 - Put container data on an encrypted partition
 - ...
 
