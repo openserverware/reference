@@ -49,7 +49,7 @@ Things that come to mind that are to be done:
 
 # What do I hope to achieve with this project?
 
-*Make it easy to implement and maintain open source server applications.*
+*Make it easy to manage open source server applications.*
 
 *In particular for small private, community and business use.*
 
