@@ -52,10 +52,3 @@ Things that come to mind that are to be done:
 *Make it easy to manage open source server applications.*
 
 *In particular for small private, community and business use.*
-
-# Why am I sharing this?
-
-I'm sharing this project hoping to receive your feedback.
-
-I will consider any changes to improve it as a reference implementation and
-help it achieve its purpose (as just mentioned).
