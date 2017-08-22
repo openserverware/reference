@@ -26,9 +26,9 @@ Running it should be as simple as entering:
 Note:
 
    - Don't forget to add the www.myvagrant.nl and cloud.myvagrant.nl domain names to your /etc/hosts file
-   - To request let's encrypt certificates, set 'letsencrypt_certificates: true'
-   - To get test certificates set '\<role\>\_letsencrypt\_test\_certificates: false'
-   - To get certificates set '\<role\>\_letsencrypt\_test\_certificates: true'
+   - To request let's encrypt certificates, set host variable 'letsencrypt_certificates: true'
+   - To get test certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: true'
+   - To get certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: false'
 
 Please read the site.yml documentation to find out about its backup and restore features.
 
@@ -38,21 +38,12 @@ The output is not (yet) suitable for public cloud infrastructure use.
 
 Things that come to mind that are to be done:
 
-- Finish the firewall integration
+- Finish the firewall configuration
 - Put container data on an encrypted partition
 - ...
 
 # What do I hope to achieve with this project?
 
-*Make it easy to implement and maintain open source server applications.*
+*Make it easy to manage open source server applications.*
 
 *In particular for small private, community and business use.*
-
-# Why am I sharing this?
-
-I'm sharing this project hoping to receive your feedback.
-
-I will consider any changes to improve it as a reference implementation and
-help it achieve its purpose (as just mentioned).
-
-...and to find a job;-)
