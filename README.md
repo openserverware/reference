@@ -9,13 +9,14 @@ Then Ansible roles are used to deploy/configure applications.
 One Ansible role is used for each application.
 
 Ansible roles are used to load Docker images onto hosts and run images as containers.
-To run images, it uses the Docker compose approach, using YAML, just like how Ansible itself defines structure.
+To run images, it uses the Docker compose approach, using YAML.
 
 Currently the following applications are included in this reference:
 
 - A reverse proxy and let's encrypt certificate manager
-- Apache
-- Nextcloud
+- A static website (Apache)
+- A cloud server (Nextcloud)
+- A metrics application (cAdvisor, Prometheus, Grafana)
 
 # How to run this?
 
@@ -25,10 +26,10 @@ Running it should be as simple as entering:
 
 Note:
 
-   - Don't forget to add the www.myvagrant.nl and cloud.myvagrant.nl domain names to your /etc/hosts file
+   - Don't forget to add the www.myvagrant.nl, cloud.myvagrant.nl and metrics.myvagrant.nl names to your /etc/hosts file
    - To request let's encrypt certificates, set host variable 'letsencrypt_certificates: true'
    - To get test certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: true'
-   - To get certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: false'
+   - To get production certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: false'
 
 Please read the site.yml documentation to find out about its backup and restore features.
 
