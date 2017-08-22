@@ -8,13 +8,8 @@ It does some simple configuration for OpenSSH and it installs Docker.
 Then Ansible roles are used to deploy/configure applications.
 One Ansible role is used for each application.
 
-Ansible roles are used to load Docker images onto hosts, build a custom image (when needed) and run images as containers.
+Ansible roles are used to load Docker images onto hosts and run images as containers.
 To run images, it uses the Docker compose approach, using YAML, just like how Ansible itself defines structure.
-
-Note:
-
-      Unfortunately this reference does not show how loaded Docker images can be used as reference to build a new image.
-      Maybe I'll add a role that does that later. It will make this reference project more complete.
 
 Currently the following applications are included in this reference:
 
