@@ -25,6 +25,10 @@ The Ansible playbook has been tested on a Vagrant machine running a Debian Jessi
 It should be no problem to run this on any other Debian Jessie/Stretch machine.
 Just make sure the inventory/hosts file in the project contains the correct ip address, port number, etc.
 
+To deploy the applications, enter:
+
+      ansible-playbook --limit vagrant_machine --tags up site.yml
+
 The following domain names are defined in the playbook and used by the reverse proxy to provide access to the applications:
 
     www.myvagrant.nl, 
@@ -33,18 +37,16 @@ The following domain names are defined in the playbook and used by the reverse p
 
 ...you will need to add them to your `hosts` file or find some other way to resolve them.
 
-Finally, to run the playbook, enter:
+After the playbook has completed running and domain names can be resolved, the applications should be accessible from your internet browser.    
 
-      ansible-playbook --limit vagrant_machine --tags up site.yml
+The following support for Let's Encrypt certificates is included in the playbook:
 
-After the playbook has completed running, the applications should be accessible from your internet browser.    
-      
-Note:
    - To request Let's Encrypt certificates, set host variable 'letsencrypt_certificates: true'
    - To get test certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: true'
    - To get production certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: false'
 
-Read the documentation in site.yml to learn about the included application data backup and restore features.
+Application data backup and restore features are included in the playbook.
+You can learn more about that (and other playbook features) from the documentation in the project `site.yml` file.
 
 # What can be improved?
 
