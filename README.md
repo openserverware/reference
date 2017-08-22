@@ -3,44 +3,56 @@
 This project contains an Ansible playbook.
 
 When run, it first configures a host machine.
-It does some simple configuration for OpenSSH and it installs Docker.
+It does some configuration for OpenSSH and it installs Docker.
 
 Then Ansible roles are used to deploy/configure applications.
 One Ansible role is used for each application.
 
-Ansible roles are used to load Docker images onto hosts and run images as containers.
-To run images, it uses the Docker compose approach, using YAML.
+To deploy/configure applications, Ansible roles load Docker images onto the host machine.
+For each Docker image, Docker Compose data is included in the Ansible role (in YAML format).
+Docker Compose is used with the image and corresponding data to run application containers.
 
-Currently the following applications are included in this reference:
+The following applications are included in this reference:
 
-- A reverse proxy and let's encrypt certificate manager
+- A reverse proxy and Let's Encrypt certificate manager
 - A static website (Apache)
 - A cloud server (Nextcloud)
 - A metrics application (cAdvisor, Prometheus, Grafana)
 
-# How to run this?
+# Running the playbook
 
-Running it should be as simple as entering:
+The Ansible playbook has been tested on a Vagrant machine running a Debian Jessie/Stretch box.
+It should be no problem to run this on any other Debian Jessie/Stretch machine.
+Just make sure the inventory/hosts file in the project contains the correct ip address, port number, etc.
+
+The following domain names are defined in the playbook and used by the reverse proxy to provide access to the applications:
+
+    www.myvagrant.nl, 
+    cloud.myvagrant.nl 
+    metrics.myvagrant.nl 
+
+...you will need to add them to your `hosts` file or find some other way to resolve them.
+
+Finally, to run the playbook, enter:
 
       ansible-playbook --limit vagrant_machine --tags up site.yml
 
+After the playbook has completed running, the applications should be accessible from your internet browser.    
+      
 Note:
-
-   - Don't forget to add the www.myvagrant.nl, cloud.myvagrant.nl and metrics.myvagrant.nl names to your /etc/hosts file
-   - To request let's encrypt certificates, set host variable 'letsencrypt_certificates: true'
+   - To request Let's Encrypt certificates, set host variable 'letsencrypt_certificates: true'
    - To get test certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: true'
    - To get production certificates, set host variables '\<role\>\_letsencrypt\_test\_certificates: false'
 
-Please read the site.yml documentation to find out about its backup and restore features.
+Read the documentation in site.yml to learn about the included application data backup and restore features.
 
 # What can be improved?
 
-The output is not (yet) suitable for public cloud infrastructure use.
-
-Things that come to mind that are to be done:
+The playbook is not (yet) suitable for deploying applications to a public cloud infrastructure.
+At least the following should be considered:
 
 - Finish the firewall configuration
-- Put container data on an encrypted partition
+- Container data should be relocated to a /home directory (and be encrypted)
 - ...
 
 # What do I hope to achieve with this project?
