@@ -45,3 +45,11 @@ mysql_nextcloud_db_password: Another_secret_4512
 # Webserver variables
 nextcloud_admin_user: cloudadmin
 nextcloud_admin_password: cloudadmin
+
+#####################################################################
+# metrics default variable overrides
+#####################################################################
+
+# Sub-domain variables
+metrics_subdomain: metrics
+metrics_letsencrypt_test_certificates: true

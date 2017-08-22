@@ -62,3 +62,5 @@
 - include: common.yml
 - include: web_server.yml
 - include: cloud_server.yml
+- include: metrics_server.yml
+

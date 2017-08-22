@@ -16,6 +16,9 @@ vagrant_machine
 [cloud_server]
 vagrant_machine
 
+[metrics_server]
+vagrant_machine
+
 #---------------------------------------------------------------------
 # Group machines by development phase, e.g:
 # testing, staging, production, etc.
