@@ -1,0 +1,19 @@
+[Unit]
+Description=cAdvisor container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name metrics_cadvisor debian
+#ExecStop=/usr/bin/docker stop -t 2 metrics_cadvisor ; /usr/bin/docker rm -f \
+metrics_cadvisor
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a metrics_cadvisor
+ExecStop=/usr/bin/docker stop -t 2 metrics_cadvisor
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,110 @@
+---
+# tasks file for metrics
+
+#
+# Create server (containers)
+#
+
+# Bring up Prometheus
+- include: prometheus_up.yml
+  tags: [up]
+
+# Bring up Node-exporter
+- include: node-exporter_up.yml
+  tags: [up]
+
+# Bring up cAdvisor
+- include: cadvisor_up.yml
+  tags: [up]
+
+# Bring up Alertmanager
+- include: alertmanager_up.yml
+  tags: [up]
+
+# Bring up Grafana
+- include: grafana_up.yml
+  tags: [up]
+
+#
+# Start server (containers)
+#
+
+# Start Prometheus
+- include: prometheus_start.yml
+  tags: [up]
+
+# Start Node-exporter
+- include: node-exporter_start.yml
+  tags: [up]
+
+# Start cAdvisor
+- include: cadvisor_start.yml
+  tags: [up]
+
+# Start Alertmanager
+- include: alertmanager_start.yml
+  tags: [up]
+
+# Start Grafana
+- include: grafana_start.yml
+  tags: [up]
+
+#
+# Stop server (containers)
+#
+
+# Stop Prometheus
+- include: prometheus_stop.yml
+  tags: [stop]
+
+# Stop Node-exporter
+- include: node-exporter_stop.yml
+  tags: [stop]
+
+# Stop cAdvisor
+- include: cadvisor_stop.yml
+  tags: [stop]
+
+# Stop Alertmanager
+- include: alertmanager_stop.yml
+  tags: [stop]
+
+# Stop Grafana
+- include: grafana_stop.yml
+  tags: [stop]
+
+#
+# Backup/restore server data
+#
+
+# Backup metrics data
+- include: metrics_backup.yml
+  tags: [backup]
+
+# Restore metrics data
+- include: metrics_restore.yml
+  tags: [restore]
+
+#
+# Destroy server (containers)
+#
+
+# Bring down Prometheus
+- include: prometheus_down.yml
+  tags: [down]
+
+# Bring down Node-exporter
+- include: node-exporter_down.yml
+  tags: [down]
+
+# Bring down cAdvisor
+- include: cadvisor_down.yml
+  tags: [down]
+
+# Bring down Alertmanager
+- include: alertmanager_down.yml
+  tags: [down]
+
+# Bring down Grafana
+- include: grafana_down.yml
+  tags: [down]

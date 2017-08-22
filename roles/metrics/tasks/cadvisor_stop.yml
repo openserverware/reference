@@ -1,0 +1,13 @@
+---
+# tasks file for metrics
+
+# Stop cAdvisor service
+- name: Stop cAdvisor service
+  systemd:
+    unit: metrics_cadvisor
+    state: stopped
+    enabled: false
+  # Ignore errors, in case the container does not exist
+  # this is for when we restore data prior to bringing up
+  # services
+  ignore_errors: true

@@ -1,0 +1,21 @@
+[Unit]
+Description=Alertmanager container
+Requires=docker.service
+# mla: decide whether to support dependencies etc.
+#After=docker.service metrics_prometheus.service
+After=docker.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name metrics_grafana debian
+#ExecStop=/usr/bin/docker stop -t 2 metrics_grafana ; /usr/bin/docker rm -f \
+metrics_grafana
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a metrics_grafana
+ExecStop=/usr/bin/docker stop -t 2 metrics_grafana
+
+[Install]
+WantedBy=multi-user.target

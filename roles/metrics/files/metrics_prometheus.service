@@ -1,0 +1,21 @@
+[Unit]
+Description=Prometheus container
+Requires=docker.service
+# mla: decide whether to support dependencies etc.
+#After=docker.service metrics_cadvisor.service
+After=docker.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name metrics_prometheus debian
+#ExecStop=/usr/bin/docker stop -t 2 metrics_prometheus ; /usr/bin/docker rm -f \
+metrics_prometheus
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a metrics_prometheus
+ExecStop=/usr/bin/docker stop -t 2 metrics_prometheus
+
+[Install]
+WantedBy=multi-user.target

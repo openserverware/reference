@@ -1,0 +1,9 @@
+---
+# tasks file for metrics
+
+# Start cAdvisor service
+- name: Start cAdvisor service
+  systemd:
+    unit: metrics_cadvisor
+    state: started
+    enabled: true

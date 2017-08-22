@@ -1,0 +1,34 @@
+---
+# vars file for metrics
+
+# Docker image names
+metrics_alertmanager_image: "prom/alertmanager@sha256:18e9ed4aebbb4071625a7e73224e82f6d820f948f504ab6863489a127ed01953"
+metrics_cadvisor_image: "google/cadvisor@sha256:ed53f9f93bb52d64fa8f95daece42d95d18d1e48a8ec9237bd5944ed634348a1"
+metrics_grafana_image: "grafana/grafana@sha256:2987e0facfcc791409bfebdeaec1a7374f180704b5edd2e0391ea306afa44119"
+metrics_nodeexporter_image: "prom/node-exporter@sha256:ffc3e0adf58771cb2097aa0b074a6fe68b4925ba75c2e1c41f41ae656eebee11"
+metrics_prometheus_image: "prom/prometheus@sha256:1e5a788d21a4f6586abf45c2efb6b94932ad8d5c9c45fbf930d5d36b81706527"
+
+# Path for building containers
+metrics_build_path: "metrics/roles/{{role_path | basename}}"
+
+# Path for creating backup archives and uploading restore archives
+metrics_backup_path: "backup/roles/{{role_path | basename}}"
+
+#
+# Grafana variables
+#
+metrics_grafana_data_path: "var/{{role_path | basename}}/grafana"
+
+#
+# Prometheus variables
+#
+
+# Prometheus config, data, etc.
+metrics_prometheus_data_path: "var/{{role_path | basename}}/prometheus"
+
+#
+# Alertmanager variables
+#
+
+# Alertmanager config
+metrics_alertmanager_data_path: "var/{{role_path | basename}}/alertmanager"

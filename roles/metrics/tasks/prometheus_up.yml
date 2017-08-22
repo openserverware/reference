@@ -1,0 +1,105 @@
+---
+# tasks file for metrics
+
+#
+# For details on the what, how and why see:
+#
+# https://github.com/vegasbrianc/prometheus/tree/version-2
+# https://github.com/prometheus/prometheus
+#
+
+#
+# Create shared data folder
+#
+- name: Create shared data folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+# mla: Who is running the container service?
+#    group: docker
+    mode: 0770
+  with_items:
+    - '/{{ metrics_prometheus_data_path }}/config'
+    - '/{{ metrics_prometheus_data_path }}/data'
+
+#
+# Write configuration files
+#
+- name: Write configuration files
+  copy:
+    src: "{{ item }}"
+    dest: "/{{ item }}"
+    owner: root
+# mla: Who is running the container service?
+#    group: docker
+    mode: 0740
+  with_items:
+    - '{{ metrics_prometheus_data_path }}/config/alert.rules'
+
+#
+# Write configuration templates
+#
+- name: Write configuration templates
+  template:
+    src: "{{ item }}.j2"
+    dest: "/{{ item }}"
+    owner: root
+# mla: Who is running the container service?
+#    group: docker
+    mode: 0740
+  with_items:
+    - '{{ metrics_prometheus_data_path }}/config/prometheus.yml'
+
+#
+# Run '{{ metrics_prometheus_image }}' image
+#
+- name: Run '{{ metrics_prometheus_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        prometheus:
+          image: "{{ metrics_prometheus_image }}"
+          container_name: metrics_prometheus
+
+          volumes:
+            - "/{{ metrics_prometheus_data_path }}/config:/etc/prometheus"
+            - "/{{ metrics_prometheus_data_path }}/data:/prometheus"
+
+          expose:
+            - "9090"
+
+          environment:
+            - "VIRTUAL_HOST={{ metrics_subdomain }}2.{{ domain }}"
+
+            - "LETSENCRYPT_HOST={{ metrics_subdomain }}2.{{ domain }}"
+            - "LETSENCRYPT_EMAIL={{ letsencrypt_email }}"
+            - "LETSENCRYPT_TEST={{ metrics_letsencrypt_test_certificates }}"
+
+          command:
+            - '-config.file=/etc/prometheus/prometheus.yml'
+            - '-storage.local.path=/prometheus'
+            - '-alertmanager.url=http://alertmanager:9093'
+            - '-storage.local.target-heap-size=104857600'
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+
+# Write 'metrics_prometheus.service' unit file
+- name: Write 'metrics_prometheus.service' unit file
+  copy:
+    src: "metrics_prometheus.service"
+    dest: "/etc/systemd/system/metrics_prometheus.service"
+    owner: root
+    mode: 0600

@@ -1,0 +1,82 @@
+---
+# tasks file for metrics
+
+#
+# For details on the what, how and why see:
+#
+# https://github.com/vegasbrianc/prometheus/tree/version-2
+# https://github.com/prometheus/alertmanager
+#
+
+#
+# Create shared data folder
+#
+- name: Create shared data folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+# mla: Who is running the container service?
+#    group: docker
+    mode: 0770
+  with_items:
+    - '/{{ metrics_alertmanager_data_path }}/config'
+    - '/{{ metrics_alertmanager_data_path }}/data'
+
+#
+# Write configuration templates
+#
+- name: Write configuration templates
+  template:
+    src: "{{ item }}.j2"
+    dest: "/{{ item }}"
+    owner: root
+# mla: Who is running the container service?
+#    group: docker
+    mode: 0740
+  with_items:
+    - '{{ metrics_alertmanager_data_path }}/config/config.yml'
+
+#
+# Run '{{ metrics_alertmanager_image }}' image
+#
+- name: Run '{{ metrics_alertmanager_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        alertmanager:
+          image: "{{ metrics_alertmanager_image }}"
+          container_name: metrics_alertmanager
+
+          volumes:
+            - "/{{ metrics_alertmanager_data_path }}/config:/etc/alertmanager"
+            - "/{{ metrics_alertmanager_data_path }}/data:/alertmanager"
+
+          expose:
+            - "9093"
+
+          command:
+            - '-config.file=/etc/alertmanager/config.yml'
+            - '-storage.path=/alertmanager'
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+
+# Write 'metrics_alertmanager.service' unit file
+- name: Write 'metrics_alertmanager.service' unit file
+  copy:
+    src: "metrics_alertmanager.service"
+    dest: "/etc/systemd/system/metrics_alertmanager.service"
+    owner: root
+    mode: 0600

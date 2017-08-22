@@ -1,0 +1,9 @@
+---
+# tasks file for metrics
+
+# Start Node-exporter service
+- name: Start Node-exporter service
+  systemd:
+    unit: metrics_node-exporter
+    state: started
+    enabled: true

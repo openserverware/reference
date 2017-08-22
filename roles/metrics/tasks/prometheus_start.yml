@@ -1,0 +1,9 @@
+---
+# tasks file for metrics
+
+# Start Prometheus service
+- name: Start Prometheus service
+  systemd:
+    unit: metrics_prometheus
+    state: started
+    enabled: true

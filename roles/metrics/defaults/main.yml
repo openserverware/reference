@@ -1,0 +1,15 @@
+---
+# defaults file for metrics
+
+# Domain variables
+domain: myvagrant.nl
+metrics_subdomain: metrics
+metrics_letsencrypt_test_certificates: true
+
+#
+# Grafana variables
+#
+
+# Grafana variables
+metrics_grafana_admin_user: admin
+metrics_grafana_admin_password: admin

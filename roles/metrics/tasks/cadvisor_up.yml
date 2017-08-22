@@ -1,0 +1,60 @@
+---
+# tasks file for metrics
+
+#
+# For details on the what, how and why see:
+#
+# https://github.com/vegasbrianc/prometheus/tree/version-2
+# https://github.com/google/cadvisor
+#
+
+
+#
+# Run '{{ metrics_cadvisor_image }}' image
+#
+- name: Run '{{ metrics_cadvisor_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        cadvisor:
+          image: "{{ metrics_cadvisor_image }}"
+          container_name: metrics_cadvisor
+
+          volumes:
+            - "/:/rootfs:ro"
+            - "/var/run:/var/run:rw"
+            - "/sys:/sys:ro"
+            - "/var/lib/docker:/var/lib/docker:ro"
+
+          expose:
+            - "8080"
+
+          environment:
+            - "VIRTUAL_HOST={{ metrics_subdomain }}3.{{ domain }}"
+
+            - "LETSENCRYPT_HOST={{ metrics_subdomain }}3.{{ domain }}"
+            - "LETSENCRYPT_EMAIL={{ letsencrypt_email }}"
+            - "LETSENCRYPT_TEST={{ metrics_letsencrypt_test_certificates }}"
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+
+# Write 'metrics_cadvisor.service' unit file
+- name: Write 'metrics_cadvisor.service' unit file
+  copy:
+    src: "metrics_cadvisor.service"
+    dest: "/etc/systemd/system/metrics_cadvisor.service"
+    owner: root
+    mode: 0600
+

@@ -1,0 +1,25 @@
+---
+# tasks file for metrics
+
+#
+# Create backup folders
+#
+- name: Create backup folders
+  file:
+    path: "~/{{ metrics_backup_path }}/grafana"
+    state: directory
+    owner: root
+    mode: 0700
+
+#
+# Archive data (overwrite previous archive)
+#
+- command: 'tar -czf "~/{{ metrics_backup_path }}/grafana/grafana_data.tgz" "/{{ metrics_grafana_data_path }}"'
+
+#
+# Fetch data to local
+#
+- fetch:
+    src: "~/{{ metrics_backup_path }}/grafana/grafana_data.tgz"
+    dest: ./backups
+    fail_on_missing: yes

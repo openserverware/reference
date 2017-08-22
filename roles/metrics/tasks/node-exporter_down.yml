@@ -1,0 +1,21 @@
+---
+# tasks file for metrics
+
+#
+# Remove '{{ metrics_nodeexporter_image }}' container
+#
+- name: Remove '{{ metrics_nodeexporter_image }}' container
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        node-exporter:
+          image: "{{ metrics_nodeexporter_image }}"
+
+    state:
+      absent
+

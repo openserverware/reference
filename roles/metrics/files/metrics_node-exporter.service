@@ -1,0 +1,19 @@
+[Unit]
+Description=Node-exporter container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name metrics_node-exporter debian
+#ExecStop=/usr/bin/docker stop -t 2 metrics_node-exporter ; /usr/bin/docker rm -f \
+metrics_node-exporter
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a metrics_node-exporter
+ExecStop=/usr/bin/docker stop -t 2 metrics_node-exporter
+
+[Install]
+WantedBy=multi-user.target

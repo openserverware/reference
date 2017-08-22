@@ -1,0 +1,56 @@
+---
+# tasks file for metrics
+
+#
+# For details on the what, how and why see:
+#
+# https://github.com/vegasbrianc/prometheus/tree/version-2
+# https://github.com/prometheus/node_exporter
+#
+
+#
+# Run '{{ metrics_nodeexporter_image }}' image
+#
+- name: Run '{{ metrics_nodeexporter_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        node-exporter:
+          image: "{{ metrics_nodeexporter_image }}"
+          container_name: metrics_node-exporter
+
+          volumes:
+            - "/proc:/host/proc:ro"
+            - "/sys:/host/sys:ro"
+            - "/:/rootfs:ro"
+
+          expose:
+            - "9100"
+
+          command:
+            - '-collector.procfs=/host/proc'
+            - '-collector.sysfs=/host/sysfs'
+            - '-collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+
+# Write 'metrics_node-exporter.service' unit file
+- name: Write 'metrics_node-exporter.service' unit file
+  copy:
+    src: "metrics_node-exporter.service"
+    dest: "/etc/systemd/system/metrics_node-exporter.service"
+    owner: root
+    mode: 0600
+

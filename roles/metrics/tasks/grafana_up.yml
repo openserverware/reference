@@ -1,0 +1,89 @@
+---
+# tasks file for metrics
+
+#
+# For details on the what, how and why see:
+#
+# https://github.com/vegasbrianc/prometheus/tree/version-2
+# https://github.com/grafana/grafana
+#
+
+#
+# Create shared data folder
+#
+- name: Create shared data folders
+  file:
+    path: "{{ item }}"
+    state: directory
+# Folders must be created,
+# owner, group and permissions are set when running the container
+  with_items:
+    - '/{{ metrics_grafana_data_path }}/config'
+    - '/{{ metrics_grafana_data_path }}/data/plugins'
+    - '/{{ metrics_grafana_data_path }}/data/dashboards'
+    - '/{{ metrics_grafana_data_path }}/logs'
+
+#
+# Write configuration files
+#
+- name: Write configuration files
+  copy:
+    src: "{{ item }}"
+    dest: "/{{ item }}"
+# Config file must be created,
+# owner, group and permissions are set when running the container
+  with_items:
+    - '{{ metrics_grafana_data_path }}/config/grafana.ini'
+
+#
+# Run '{{ metrics_grafana_image }}' image
+#
+- name: Run '{{ metrics_grafana_image }}' image
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        grafana:
+          image: "{{ metrics_grafana_image }}"
+          container_name: metrics_grafana
+
+          volumes:
+            - "/{{ metrics_grafana_data_path }}/config:/etc/grafana"
+            - "/{{ metrics_grafana_data_path }}/data:/var/lib/grafana"
+            - "/{{ metrics_grafana_data_path }}/logs:/var/log/grafana"
+
+          expose:
+            - "3000"
+
+          environment:
+            - "GF_SECURITY_ADMIN_USER={{ metrics_grafana_admin_user }}"
+            - "GF_SECURITY_ADMIN_PASSWORD={{ metrics_grafana_admin_password }}"
+
+            - "VIRTUAL_HOST={{ metrics_subdomain }}.{{ domain }}"
+
+            - "LETSENCRYPT_HOST={{ metrics_subdomain }}.{{ domain }}"
+            - "LETSENCRYPT_EMAIL={{ letsencrypt_email }}"
+            - "LETSENCRYPT_TEST={{ metrics_letsencrypt_test_certificates }}"
+
+          labels:
+            # Add label to indicate the related server
+            # (as indicated by the role base folder name)
+            # The label is used by Grafana to filter container metrics
+            - "container_related_server={{role_path | basename}}"
+
+    state:
+      present
+
+# Write 'metrics_grafana.service' unit file
+- name: Write 'metrics_grafana.service' unit file
+  copy:
+    src: "metrics_grafana.service"
+    dest: "/etc/systemd/system/metrics_grafana.service"
+    owner: root
+    mode: 0600
+
+

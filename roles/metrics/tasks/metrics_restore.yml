@@ -1,0 +1,46 @@
+---
+# tasks file for metrics
+
+#
+# Create restore folders
+#
+- name: Create restore folders
+  file:
+    path: "~/{{ metrics_backup_path }}/grafana"
+    state: directory
+    owner: root
+    mode: 0700
+#
+# Restore data
+#
+- name: Copy data to remote
+  copy:
+    src: ./backups/{{ inventory_hostname }}/root/{{ metrics_backup_path }}/grafana/grafana_data.tgz
+    dest: "~/{{ metrics_backup_path }}/grafana"
+    owner: root
+    mode: 0700
+
+- name: Check for uploaded data
+  stat:
+    path: "~/{{ metrics_backup_path }}/grafana/grafana_data.tgz"
+  register: a1
+
+- name: Failing if needed
+  fail:
+    msg: "Site data not uploaded!"
+  when: a1.stat.exists == false
+
+- name: Check for existing data
+  stat:
+    path: "/{{ metrics_grafana_data_path }}"
+  register: a2
+
+- name: Move existing data
+  command: "{{ item }}"
+  with_items:
+    - 'rm -rf /{{ metrics_grafana_data_path }}_prev'
+    - 'mv /{{ metrics_grafana_data_path }} /{{ metrics_grafana_data_path }}_prev'
+  when: a2.stat.isdir is defined and a2.stat.isdir
+
+- name: Extracting site data
+  shell: 'cd /. && tar -xzf ~/{{ metrics_backup_path }}/grafana/grafana_data.tgz'

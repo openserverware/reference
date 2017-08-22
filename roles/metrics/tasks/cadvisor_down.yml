@@ -1,0 +1,21 @@
+---
+# tasks file for metrics
+
+#
+# Remove '{{ metrics_cadvisor_image }}' container
+#
+- name: Remove '{{ metrics_cadvisor_image }}' container
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        cadvisor:
+          image: "{{ metrics_cadvisor_image }}"
+
+    state:
+      absent
+

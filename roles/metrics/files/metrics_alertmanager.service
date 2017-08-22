@@ -1,0 +1,19 @@
+[Unit]
+Description=Alertmanager container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+# Run image (create new environment)
+#ExecStart=/usr/bin/docker run --env foo=bar --name metrics_alertmanager debian
+#ExecStop=/usr/bin/docker stop -t 2 metrics_alertmanager ; /usr/bin/docker rm -f \
+metrics_alertmanager
+
+# Resume container (keep its existing environment)
+ExecStart=/usr/bin/docker start -a metrics_alertmanager
+ExecStop=/usr/bin/docker stop -t 2 metrics_alertmanager
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+---
+# tasks file for metrics
+
+#
+# Remove '{{ metrics_prometheus_image }}' container
+#
+- name: Remove '{{ metrics_prometheus_image }}' container
+  docker_service:
+    project_name:
+      "dsc"
+
+    definition:
+      version: '2'
+
+      services:
+        prometheus:
+          image: "{{ metrics_prometheus_image }}"
+
+    state:
+      absent

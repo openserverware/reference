@@ -1,0 +1,7 @@
+---
+# file: metrics_server.yml
+
+- hosts: metrics_server
+  become: yes
+  roles:
+    - { role: metrics }

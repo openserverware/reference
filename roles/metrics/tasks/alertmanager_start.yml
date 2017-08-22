@@ -1,0 +1,9 @@
+---
+# tasks file for metrics
+
+# Start Alertmanager service
+- name: Start Alertmanager service
+  systemd:
+    unit: metrics_alertmanager
+    state: started
+    enabled: true
